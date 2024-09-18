@@ -1,0 +1,50 @@
+{
+    "environment_config": {
+        "test": {
+            "url": "https://walletchallenge-front.onrender.com",
+            "db_connection_string": "Server=test-db;Database=myTestDB;User Id=myUsername;Password=myPassword;",
+            "api_key": "test_api_key_12345"
+        },
+        "development": {
+            "url": "https://walletchallenge-front.onrender.com",
+            "db_connection_string": "Server=dev-db;Database=myDevDB;User Id=myUsername;Password=myPassword;",
+            "api_key": "dev_api_key_67890"
+        },
+        "production": {
+            "url": "https://walletchallenge-front.onrender.com",
+            "db_connection_string": "Server=prod-db;Database=myProdDB;User Id=myUsername;Password=myPassword;",
+            "api_key": "prod_api_key_abcde"
+        }
+    },
+    "login_tests": [
+        {
+            "username": "prueba",
+            "password": "challenge",
+            "expected_message": "Login Exitoso, redirigiendo a la página principal..."
+        },
+        {
+            "username": "usuariofake",
+            "password": "challenge",
+            "expected_message": "Error: No se pudo validar las credenciales"
+        },
+        {
+            "username": "challenge",
+            "password": "clave",
+            "expected_message": "Error: No se pudo validar las credenciales"
+        }
+    ],
+    "button_tests": {
+        "login_button_text": "Iniciar Sesión",
+        "login_button_color": "#0CAF50"
+    },
+    "field_tests": {
+        "username_field_type": "text",
+        "password_field_type": "password"
+    },
+    "home_tests": [
+        {
+            "welcome_message": "¡1Bienvenido! Ha iniciado sesión correctamente.",
+            "tarjeta_number": "437123768444"
+        }
+    ]
+}
