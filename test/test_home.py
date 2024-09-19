@@ -12,8 +12,7 @@ def data() -> TestConfig:
      return test_data()
 
 @pytest.fixture(scope="function")
-def page(data):
-    
+def page(data):    
     login_page = LoginPage(wait=60, driver_to_use='chrome')
     user = data.login_tests[0]
     login_page.navigate_to_login_page()

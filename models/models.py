@@ -15,9 +15,6 @@ class LoginTest:
 
 @dataclass
 class ButtonTests:
-    variable = {"nombre":"Pedro",
-                "apellido":"Gomez"}
-    
     login_button_text: str
     login_button_color: str
 
