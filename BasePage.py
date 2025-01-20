@@ -18,6 +18,9 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support.expected_conditions import text_to_be_present_in_element
+# Opcional: Solo si desea que selenium administre las versiones de webdriver.
+from webdriver_manager.chrome import ChromeDriverManager
 
 class BasePage(By):
     
@@ -29,7 +32,7 @@ class BasePage(By):
                  wait: int = 10, 
                  highlight: bool = False, 
                  proxy: str = '', 
-                 load_timeout_site: int = 120, 
+                 load_timeout_site: int = 20, 
                  headless: bool = False, 
                  ignore_cert_errors: bool = True):
         
@@ -76,8 +79,9 @@ class BasePage(By):
                     chrome_options.add_argument(f'--proxy-server={proxy}')
                 if ignore_cert_errors:
                     chrome_options.add_argument('--ignore-certificate-errors')
-                self.driver = webdriver.Chrome(options=chrome_options, service=ChromeService())
-                
+                #Opcion si NO desea que ChromeDriverManager administre las versiones del driver.
+                #self.driver = webdriver.Chrome(options=chrome_options, service=ChromeService())
+                self.driver = webdriver.Chrome(options=chrome_options, service=ChromeService(ChromeDriverManager().install()))
         else:
             self.driver = driver
         
@@ -115,9 +119,9 @@ class BasePage(By):
     # La funcion "find" devuelve un webElement en base al "locator" recibido.
     def find(self, locator: tuple) -> WebElement:
         try:
-            # element = self.wait.until(ec.presence_of_element_located(locator))  # espera que esté presente
-            element = self.wait.until(ec.visibility_of_element_located(locator))  # espera que esté visible
-            # element = self.wait.until(ec.element_to_be_clickable(locator))  # espera que sea clickable
+            # element = self.wait.until(ec.presence_of_element_located(locator))  # Este método verifica si el elemento está presente en el DOM. No considera si es visible o interactuable.
+            element = self.wait.until(ec.visibility_of_element_located(locator))  # Este método verifica si el elemento no solo está presente en el DOM, sino también si es visible, lo que significa que su altura y anchura son mayores a 0, y no está oculto por CSS.
+            # element = self.wait.until(ec.element_to_be_clickable(locator))  # Este método va un paso más allá, asegurando que el elemento esté visible y además habilitado para clics. 
             if self.highlight:
                 self.driver.execute_script(self.highlight_script, element)
             return element
@@ -140,6 +144,11 @@ class BasePage(By):
         if element is not None:
             return element.text
 
+    # La funcion obtiene el texto de un textbox.
+    def get_text_to_be_present_in_element(self, locator:tuple, text: str):
+        is_text_present = self.wait.until(text_to_be_present_in_element((locator), text))
+        return is_text_present
+    
     # La funcion inserta texto en un textbox.
     def set_text(self, locator, text_to_write):
         self.clear_text(locator)
